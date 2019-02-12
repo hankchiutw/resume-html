@@ -1,45 +1,28 @@
 {
-  "name": "resume-cli",
-  "version": "1.1.2",
-  "description": "The JSON Resume command line interface",
+  "name": "resume-html",
+  "version": "1.0.0",
+  "description": "convert a json resume to html",
   "main": "index.js",
   "scripts": {
-    "export": "./index.js export index.html",
     "test": "node node_modules/mocha/bin/mocha test test/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rolandnsharp/resume-cli.git"
+    "url": "https://github.com/hankchiutw/resume-html.git"
   },
   "license": "MIT",
   "bin": {
-    "resume": "index.js"
+    "resume-html": "index.js"
   },
   "preferGlobal": true,
   "dependencies": {
-    "async": "^1.5.0",
-    "chalk": "^1.1.1",
-    "char-spinner": "^1.0.1",
-    "cli-spinner": "^0.2.1",
-    "colors": "^1.1.2",
-    "commander": "^2.9.0",
-    "dotenv": "^2.0.0",
-    "jsonlint": "^1.6.2",
-    "jsonresume-theme-crisp": "^0.2.12",
-    "jsonresume-theme-flat": "^0.3.7",
-    "jsonresume-theme-modern": "0.0.18",
-    "node-static": "~0.7.7",
-    "opn": "5.4.0",
-    "puppeteer": "^1.0.0",
-    "read": "~1.0.7",
-    "resume-schema": "latest",
-    "resume-to-html": "latest",
-    "resume-to-text": "latest",
-    "should": "^11.1.0",
-    "superagent": "^3.8.3",
-    "terminal-menu": "^2.1.1"
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0",
+    "jsonlint": "^1.6.3",
+    "jsonresume-theme-flat": "^0.3.7"
   },
   "devDependencies": {
+    "should": "^11.1.0",
     "mocha": "^3.0.2"
   },
   "engines": {
