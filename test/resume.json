@@ -121,6 +121,13 @@
       ]
     }
   ],
+  "projects": [
+    {
+      "name": "Open source app",
+      "description": "An app"
+    }
+
+  ],
   "references": [
     {
       "name": "Erlich Bachman",
