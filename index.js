@@ -1,63 +1,73 @@
 #!/usr/bin/env node
+/* globals __dirname, process */
 
 require("dotenv").load({ silent: true });
 var pkg = require(__dirname + "/package.json");
-var lib = require(__dirname + "/lib");
 var program = require("commander");
-var colors = require("colors");
 var chalk = require("chalk");
-var read = require("read");
 var path = require("path");
-var exportResume = require('./export-resume.js');
+var fs = require("fs");
+var jsonlint = require("jsonlint");
 
-lib.preFlow(function(err, results) {
-  var resumeJson = results.getResume;
-  var config = results.getConfig;
+async function getResume() {
+  var jsonLocation = "./resume.json";
+  process.argv.forEach(function(arg) {
+    if (arg.indexOf("--resume") !== -1 || arg.indexOf("-r") !== -1) {
+      jsonLocation = arg.replace("--resume=", "").replace("-r=", "");
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+    fs.readFile(jsonLocation, function(resumeJsonDoesNotExist, data) {
+      if (resumeJsonDoesNotExist) {
+        if (["export", "publish", "test"].indexOf(process.argv[2]) !== -1) {
+          // removed serve. test this later
+          console.log("There is no resume.json file located in this directory");
+          console.log("Type: `resume init` to initialize a new resume");
+          return;
+        }
+        resolve("");
+      } else {
+        try {
+          jsonlint.parse(String(data));
+          var resumeJson = JSON.parse(data);
+          resolve(resumeJson);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    });
+  });
+}
+
+(async () => {
+  const resumeJson = await getResume();
 
   program
     .usage("[command] [options]")
     .version(pkg.version)
     .option(
       "-t, --theme <theme name>",
-      "Specify theme for export or publish (modern, crisp, flat: default)",
-      "flat"
+      "Specify theme for export (default: jsonresume-theme-flat)",
+      "jsonresume-theme-flat"
     )
-    .option("-F, --force", "Used by `publish` - bypasses schema testing.")
-    .option("-f, --format <file type extension>", "Used by `export`.")
     .option(
       "-r, --resume <resume filename>",
       "Used by `serve` (default: resume.json)",
       path.join(process.cwd(), "resume.json")
-    )
-    .option("-p, --port <port>", "Used by `serve` (default: 4000)", 4000)
-    .option(
-      "-s, --silent",
-      "Used by `serve` to tell it if open browser auto or not.",
-      false
-    )
-    .option(
-      "-d, --dir <path>",
-      "Used by `serve` to indicate a public directory path.",
-      "public"
     );
 
   program
     .command("export [fileName]")
-    .description(
-      "Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format."
-    )
+    .description("Export locally to .html")
     .action(function(fileName) {
-      exportResume(resumeJson, fileName, program, function(
-        err,
-        fileName,
-        format
-      ) {
+      const theme = require(`./theme/${program.theme}`);
+      const html = theme.render(resumeJson);
+      fs.writeFile(fileName, html, () => {
         console.log(
           chalk.green(
-            "\nDone! Find your new",
-            format,
-            "resume at:\n",
-            path.resolve(process.cwd(), fileName + format)
+            "\nDone! Find your new resume at:\n",
+            path.resolve(process.cwd(), fileName)
           )
         );
       });
@@ -77,4 +87,4 @@ lib.preFlow(function(err, results) {
     console.log("resume-cli:".cyan, "https://jsonresume.org", "\n");
     program.help();
   }
-});
+})();
