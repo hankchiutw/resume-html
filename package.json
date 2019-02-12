@@ -4,6 +4,7 @@
   "description": "The JSON Resume command line interface",
   "main": "index.js",
   "scripts": {
+    "export": "./index.js export index.html",
     "test": "node node_modules/mocha/bin/mocha test test/*.js"
   },
   "repository": {

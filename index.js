@@ -26,43 +26,6 @@ lib.preFlow(function(err, results) {
     .option('-d, --dir <path>', 'Used by `serve` to indicate a public directory path.', 'public');
 
   program
-    .command('init')
-    .description('Initialize a resume.json file')
-    .action(function() {
-      lib.init()
-    });
-
-  program
-    .command('register')
-    .description('Register an account at https://registry.jsonresume.org')
-    .action(function() {
-      lib.register(resumeJson);
-    });
-
-  program
-    .command('login')
-    .description('Stores a user session.')
-    .action(function() {
-      lib.login(resumeJson);
-    });
-
-  program
-    .command('settings')
-    .description('Change theme, change password, delete account.')
-    .action(function() {
-      lib.settings(resumeJson, program, config);
-    });
-
-  program
-    .command('test')
-    .description('Schema validation test your resume.json')
-    .action(function() {
-      lib.test.validate(resumeJson, function(error, response) {
-        error && console.log(response.message);
-      });
-    });
-
-  program
     .command('export [fileName]')
     .description('Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format.')
     .action(function(fileName) {
@@ -71,19 +34,6 @@ lib.preFlow(function(err, results) {
       });
     });
 
-  program
-    .command('publish')
-    .description('Publish your resume to https://registry.jsonresume.org')
-    .action(function() {
-      lib.publish(resumeJson, program, config);
-    });
-
-  program
-    .command('serve')
-    .description('Serve resume at http://localhost:4000/')
-    .action(function() {
-      lib.serve(program.port, program.theme, program.silent, program.dir, program.resume);
-    });
 
   program.parse(process.argv);
 
