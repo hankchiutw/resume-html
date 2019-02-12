@@ -8,6 +8,7 @@ var colors = require("colors");
 var chalk = require("chalk");
 var read = require("read");
 var path = require("path");
+var exportResume = require('./export-resume.js');
 
 lib.preFlow(function(err, results) {
   var resumeJson = results.getResume;
@@ -46,7 +47,7 @@ lib.preFlow(function(err, results) {
       "Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format."
     )
     .action(function(fileName) {
-      lib.exportResume(resumeJson, fileName, program, function(
+      exportResume(resumeJson, fileName, program, function(
         err,
         fileName,
         format

@@ -13,6 +13,8 @@ var puppeteer = require("puppeteer");
 
 var SUPPORTED_FILE_FORMATS = ["html", "pdf"];
 
+const flatTheme = require('./jsonresume-theme-flat')
+
 module.exports = function exportResume(
   resumeJson,
   fileName,
@@ -91,8 +93,7 @@ const getThemePkg = theme => {
 };
 
 const renderHtml = (resumeJson, theme) => {
-  const themePkg = getThemePkg(theme);
-  const contents = themePkg.render(resumeJson);
+  const contents = flatTheme.render(resumeJson);
   return contents;
 };
 
