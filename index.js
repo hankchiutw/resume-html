@@ -52,8 +52,8 @@ program
       throw error
     })
 
-    const theme = require(program.theme)
-    const html = theme.render(resumeJson)
+    const { render } = require(program.theme)
+    const html = render(resumeJson)
     fs.writeFile(fileName, html, () => {
       console.log(
         chalk.green(

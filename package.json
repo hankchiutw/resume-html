@@ -1,11 +1,16 @@
 {
   "name": "resume-html",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "convert a json resume to html",
   "main": "index.js",
+  "config": {
+    "devTheme": "./theme/jsonresume-theme-so"
+  },
   "scripts": {
-    "dev": "concurrently \"npm run export\" \"lite-server\"",
-    "export": "nodemon ./index.js index.html -r ./test/resume.json",
+    "dev": "concurrently \"npm run watch:theme\" \"npm run export\" \"npm run serve\"",
+    "serve": "lite-server",
+    "export": "nodemon ./index.js index.html -r ./test/resume.json -t jsonresume-theme-so",
+    "watch:theme": "nodemon --prefix $npm_package_config_devTheme -w $npm_package_config_devTheme/src --exec 'rm $npm_package_config_devTheme/.babelrc &> /dev/null; npm run build'",
     "test": "node node_modules/mocha/bin/mocha test test/*.js"
   },
   "repository": {
@@ -17,6 +22,8 @@
     "resume-html": "index.js"
   },
   "preferGlobal": true,
+  "private": true,
+  "workspaces": ["theme/*"],
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
